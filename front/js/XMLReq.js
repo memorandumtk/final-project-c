@@ -25,4 +25,4 @@ class XMLReq{
    }
 }
 
-export {XMLReq};
+export default XMLReq;
