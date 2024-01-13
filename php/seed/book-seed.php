@@ -1,12 +1,10 @@
 <?php
-require "./serachVal.php";
 require "../config.php";
 
 function storeBook($book, $dbCon)
 {
     $title = $book['volumeInfo']['title'];
-    // There is some book doesn't have ISBN.
-    // $isbn = $book['volumeInfo']['industryIdentifiers'][1]['identifier'];
+    // If there is needs to take ISBN of the book, can use 'seach-isbn.php'.
     $description = $book['volumeInfo']['description'] ?: 'No description.';
     $authors = implode(", ", $book['volumeInfo']['authors']);
     $image_url = $book['volumeInfo']['imageLinks']['thumbnail'];
