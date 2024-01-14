@@ -2,7 +2,6 @@
 import XMLReq from "../XMLReq.js"
 import Book from "../classes/book.js";
 let staffPhp = "http://localhost/final-project-c/php/staff.php";
-const allBookData = [];
 const allBookObjData = [];
 
 // Add event listener to the button to add a book
@@ -39,10 +38,10 @@ const tablePopper = () => {
         delButton.textContent = 'Delete';
         delButton.classList.add('btn', 'btn-success')
         // Unless status is Available, button should be disabled.
-        if(book.status !== 'Available'){
+        if (book.status !== 'Available') {
             delButton.disabled = true;
         }
-        delButton.addEventListener('click', (e)=> {
+        delButton.addEventListener('click', (e) => {
             e.preventDefault();
             deleteHandler(book);
         })
@@ -52,42 +51,21 @@ const tablePopper = () => {
     }
 }
 
-// Function to get all of book data.
-const getBorrowedStatus = async (book) => {
+// Function to get all of book data with borrowed info.
+const getAllBookWithStatus = async (book) => {
     // Apend path info to tell path in php.
-    let statusOfBookPath = staffPhp + "/status";
-    // Making xmlhttp request to status of book.
-    let statusOfBookRequest = new XMLReq(statusOfBookPath);
-    let reqData = new FormData();
-    reqData.append("book_id", book.book_id);
+    let path = staffPhp + "/status";
+    // Making xmlhttp request to all book info with status.
+    let allBookInfoRequest = new XMLReq(path);
     try {
-        let data = await statusOfBookRequest.Post(reqData);
-        // Add data from `book_status_tb` and create book object by Book class.
-        book.status = (!data) ? 'Available' : 'Borrowed';
-        book.borrowed_at = (!data) ? null : JSON.parse(data).borrowed_at;
-        book.due_back = (!data) ? null : JSON.parse(data).due_back;
-        let bookObj = new Book(book.book_id, book.title, book.description, book.authors, book.registered_at, book.image_url, book.status, book.borrowed_at, book.due_back);
-        // After making book object, push it to the array for book obj.
-        allBookObjData.push(bookObj);
-    } catch (rej) {
-        console.log(rej);
-    }
-}
-
-// Function to get all of book data.
-const getAllBookData = async () => {
-    // Apend path info to tell path in php.
-    let allBookPath = staffPhp + "/all-books";
-    // Making xmlhttp request to get all book data.
-    let allBookRequest = new XMLReq(allBookPath);
-    try {
-        let data = await allBookRequest.Post();
-        let loadData = JSON.parse(data);
-        for (let data of loadData) {
-            allBookData.push(data);
+        let data = await allBookInfoRequest.Post();
+        // Read data from 'book_tb' and 'book_status_tb' and create book object by Book class.
+        data = (JSON.parse(data));
+        for (let book of data) {
+            let bookObj = new Book(book.book_id, book.title, book.description, book.authors, book.registered_at, book.image_url, book.status, book.borrowed_at, book.due_back);
+            // After making book object, push it to the array for book obj.
+            allBookObjData.push(bookObj);
         }
-        console.log('this is log from all books');
-        console.log(allBookData);
     } catch (rej) {
         console.log(rej);
     }
@@ -95,12 +73,8 @@ const getAllBookData = async () => {
 
 // Modify load function to use async/await
 async function load() {
-    // Since 'getAllBookData' function is using promise, so I needed to use await.
-    await getAllBookData();
-    for (let book of allBookData) {
-        // Since 'getBorrowedStatus' function is using promise, so I needed to use await as well.
-        await getBorrowedStatus(book);
-    }
+    // Since 'getBorrowedStatus' function is using promise, so I needed to use await as well.
+    await getAllBookWithStatus();
     console.log(allBookObjData);
     tablePopper();
 }

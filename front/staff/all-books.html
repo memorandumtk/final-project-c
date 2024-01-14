@@ -15,12 +15,11 @@
 </head>
 
 <body>
-
     <header>
-        <nav class="navbar navbar-expand-sm navbar-info bg-info">
+        <nav class="navbar navbar-expand-sm navbar-info bg-info overflow-hidden">
             <div class="container">
                 <div class="col-4">
-                    <a class="navbar-brand text-white" href="#">Navbar</a>
+                    <a class="navbar-brand text-white" href="#">C-Library</a>
                 </div>
                 <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse"
                     data-bs-target="#collapsibleNavId" aria-controls="collapsibleNavId" aria-expanded="false"
@@ -30,11 +29,10 @@
                 <div class="collapse navbar-collapse justify-content-end" id="collapsibleNavId">
                     <ul class="navbar-nav mt-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link active text-white" href="#" aria-current="page">Home
-                                <span class="visually-hidden">(current)</span></a>
+                            <a class="nav-link active text-white" href="#" aria-current="page">All-Books</a>
                         </li>
                         <li class="nav-item ">
-                            <a class="nav-link text-white" href="#">Link</a>
+                            <a class="nav-link text-white" href="#">Book Info</a>
                         </li>
                     </ul>
                 </div>
@@ -45,18 +43,24 @@
 
 
     <main>
-        <div class="container">
-            <div class="cards-div row row-cols-2 row-cols-md-3 g-4">
-                <!-- // Element of cards come here... -->
+        <div class="container text-center">
+            <div class="d-flex flex-column gap-3">
+                <div class="col">
+                    <h2 class="">
+                        All Books
+                    </h2>
+                </div>
+                <div class="container">
+                    <div class="cards-div row row-cols-2 row-cols-md-3 g-4">
+                        <!-- // Element of cards come here... -->
+                    </div>
+                </div>
             </div>
-        </div>
-
     </main>
 
 
-
     <footer>
-        <div class="container-fruid bg-info">
+        <div class="container-fruid bg-info overflow-hidden">
             <div class="row">
                 <div class="d-flex justify-content-end text-white pe-4">
                     Copyright@ teamC
@@ -64,6 +68,7 @@
             </div>
         </div>
     </footer>
+
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"

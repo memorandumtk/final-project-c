@@ -32,12 +32,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if ($dbCon->connect_error) {
                     echo "DB connection error. " . $dbCon->connect_error;
                 } else {
-                    $bookId = $_POST["book_id"];
-                    $selectStatusOfBook = "SELECT * FROM `book_status_tb` WHERE book_id = $bookId";
-                    $result = $dbCon->query($selectStatusOfBook);
-                    if ($result->num_rows == 1) {
-                        $statusRecord = $result->fetch_assoc();
-                        echo json_encode($statusRecord);
+                    // this is query to take neccesary data to create book object to produce book info table having status info.
+                    $selectAllfBookWithStatus = "SELECT book_tb.book_id, book_tb.title, book_tb.description, book_tb.authors, book_tb.registered_at, book_tb.image_url, book_status_tb.borrowed_at, book_status_tb.due_back FROM book_tb LEFT JOIN book_status_tb ON book_tb.book_id = book_status_tb.book_id;";
+                    $result = $dbCon->query($selectAllfBookWithStatus);
+                    if ($result->num_rows > 0) {
+                        $allBookDataWithStatus = [];
+                        while ($book = $result->fetch_assoc()) {
+                            $book["status"] = ($book["borrowed_at"]) ? 'Borrowed' : 'Available';
+                            foreach ($book as $key => $value) {
+                                // for loop to change null value to hyphen(-).
+                                if (!$value) {
+                                    $book[$key] = '-';
+                                }
+                            }
+                            array_push($allBookDataWithStatus, $book);
+                        }
+                        echo json_encode($allBookDataWithStatus);
                     } else {
                         echo null;
                     }

@@ -6,3 +6,7 @@ html {
 *,*:after,*:before {
   box-sizing: border-box;
 }
+
+.nav-link.active{
+  font-weight: bold;
+}

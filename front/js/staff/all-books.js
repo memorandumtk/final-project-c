@@ -1,6 +1,5 @@
 
 import XMLReq from "../XMLReq.js"
-import { cardPopper } from "../test.js";
 import Book from "../classes/book.js";
 let staffPhp = "http://localhost/final-project-c/php/staff.php";
 const allBookData = [];
