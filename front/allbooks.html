@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Books</title>
+    <!-- Bootstrap CSS v5.2.1 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+
+    <style>
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand navbar-light bg-light">
+        <div class="nav navbar-nav">
+            <a class="nav-item nav-link active" href="#" aria-current="page">All Books <span
+                    class="visually-hidden">(current)</span></a>
+            <a class="nav-item nav-link" href="./avBooks.html">Available Books</a>
+            <a class="nav-item nav-link" href="./borrBooks.html">Borrowed Books</a>
+        </div>
+    </nav>
+
+    <div class="card-container">
+
+    </div>
+
+</body>
+
+<script type="module">
+    import { XMLReq } from "./js/XMLReq.js";
+    let xmlReq = new XMLReq("http://localhost/php/final-project-c/index.php/allbooks");
+
+    const toCard = (data) => {
+        const cardContainer = document.querySelector(".card-container");
+
+        data.forEach((book) => {
+            let card = createCard(book);
+            cardContainer.appendChild(card);
+        });
+    };
+
+    const load = () => {
+        xmlReq.Post().then(
+            (response) => {
+                const jsonData = JSON.parse(response);
+                console.log(jsonData);
+                toCard(jsonData);
+            }
+        );
+    };
+    load();
+
+
+    function createCard(array) {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.style = 'width: 18rem;';
+
+        //image
+        const image = document.createElement('img');
+        image.src = array[5];
+        image.className = 'card-img-top';
+        image.alt = 'Book Image';
+        card.appendChild(image);
+
+        // title
+        const title = document.createElement('h3');
+        title.className = 'card-title';
+        title.innerText = array[1];
+        card.appendChild(title);
+
+        // description with button
+        const descriptionButton = document.createElement('button');
+        descriptionButton.className = 'btn btn-primary';
+        descriptionButton.innerText = 'Show Description';
+        descriptionButton.addEventListener('click', () => {
+            alert(array[2]);
+        });
+        card.appendChild(descriptionButton);
+
+        // authors
+        const author = document.createElement('p');
+        author.className = 'card-text';
+        author.innerText = 'Author: ' + array[3];
+        card.appendChild(author);
+
+        // date
+        const releaseDate = document.createElement('p');
+        releaseDate.className = 'card-text';
+        releaseDate.innerText = 'Release Date: ' + array[4];
+        card.appendChild(releaseDate);
+
+        return card;
+    }
+
+
+</script>
+
+</html>
