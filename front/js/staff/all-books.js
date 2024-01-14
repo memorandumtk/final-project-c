@@ -1,7 +1,7 @@
 
 import XMLReq from "../XMLReq.js"
 import Book from "../classes/book.js";
-let staffPhp = "http://localhost/final-project-c/php/staff.php";
+let staffPhp = "http://localhost/php/final-project-c/php/staff.php";
 const allBookData = [];
 
 const displayCardOfBook = () => {

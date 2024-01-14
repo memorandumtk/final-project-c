@@ -1,13 +1,13 @@
 
 import XMLReq from "../XMLReq.js"
 import Book from "../classes/book.js";
-let staffPhp = "http://localhost/final-project-c/php/staff.php";
+let staffPhp = "http://localhost/php/final-project-c/php/staff.php";
 const allBookObjData = [];
 
 // Add event listener to the button to add a book
 const addButton = document.querySelector("#addButton");
 addButton.addEventListener('click', (e) => {
-    location.replace('http://localhost/final-project-c/front/staff/add-book.html');
+    location.replace('http://localhost/php/final-project-c/front/staff/add-book.html');
 })
 
 // Handle if delete button is clicked.
