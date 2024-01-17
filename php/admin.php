@@ -11,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if (!$dbCon) {
                     die("Connection error " . mysqli_connect_error());
                 } else {
-                    $selectCmd = "SELECT * FROM staff_db";
+                    $selectCmd = "SELECT * FROM user_tb WHERE type=0";
                     $result = mysqli_query($dbCon, $selectCmd);
 
                     $dbData = array();
@@ -28,13 +28,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 break;
 
             case "/delete":
-                if (isset($_POST["staff_id"])) {
+                if (isset($_POST["uid"])) {
                     $dbCon = new mysqli($dbServer, $dbUser, $dbPass, $dbName);
                     if ($dbCon->connect_error) {
                         echo "DB connection error. " . $dbCon->connect_error;
                     } else {
-                        $staffId = $_POST["staff_id"];
-                        $delCmd = ("DELETE FROM `staff_db` WHERE staff_id = $staffId");
+                        $staffId = $_POST["uid"];
+                        $delCmd = ("DELETE FROM `user_tb` WHERE `uid` = $staffId");
                         $result = mysqli_query($dbCon, $delCmd);
                        
                         $dbCon->close();

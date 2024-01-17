@@ -13,7 +13,7 @@ const deleteHandler = async (staff) => {
     // Making xmlhttp request to delete book info.
     let deleteStaffRequest = new XMLReq(deleteStaffPath);
     let reqData = new FormData();
-    reqData.append("staff_id", staff.staff_id);
+    reqData.append("uid", staff.uid);
     try {
         let data = await deleteStaffRequest.Post(reqData);
         console.log(data);
@@ -69,8 +69,9 @@ const staffData = async () => {
 
         //data= all of the staff data,staff
         for (let staff of data) {
-            let staffObj = new Staff(staff.staff_id, staff.fname, staff.lname, staff.email, staff.pass, staff.phone);
+            let staffObj = new Staff(staff.uid, staff.fname, staff.lname, staff.email, staff.pass, staff.phone);
             staffList.push(staffObj);
+            console.log(staffList);
         }
 
     } catch (rej) {
@@ -85,3 +86,8 @@ async function load() {
     tablePopper();
 }
 load();
+
+// add staff
+function redirectToRegisterPage() {
+    window.location.href = "http://localhost/php/final-project-c/front/registerSa.html";
+}
