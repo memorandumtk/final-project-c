@@ -34,21 +34,28 @@
                         <label for="pass">Enter Password</label>
                     </div>
                     <button type="submit" class="btn btn-outline-primary">Register</button>
+                    <div>
+                        <a href="registerSa.html"><p>  Login as staff or admin</p></a>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
 </body>
 <script>
-    document.querySelector("form").addEventListener("submit",function(event){
-        event.preventDefault(); // to stop the form from submitting normally
-        let data = new FormData(event.target);
-        let xhttp = new XMLHttpRequest();
-        xhttp.open("POST","http://localhost/books/myMain.php/register");
-        xhttp.send(data);
-        xhttp.onload = function(){
+  document.querySelector("form").addEventListener("submit",function(event){
+    event.preventDefault(); // to stop the form from submitting normally
+    let data = new FormData(event.target);
+    let xhttp = new XMLHttpRequest();
+    xhttp.open("POST","http://localhost/books/myMain.php/register");
+    xhttp.send(data);
+    xhttp.onload = function(){
+        if (xhttp.response == "Registered successfully") { // check the response from the server
+            location.replace("./login.html"); // redirect to login.html
+        } else {
             console.log(xhttp.response);
         }
-    })
+    }
+})
 </script>
 </html>

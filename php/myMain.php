@@ -1,7 +1,7 @@
 <?php
 header("Access-Control-Allow-Origin: *");
 require("./config.php");
-require ("./class/user.php");
+require ("./classes/user.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if(isset($_SERVER["PATH_INFO"])){
@@ -20,7 +20,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $insertCmd = $dbCon->prepare("INSERT INTO customer_tb(fname,lname,email,pass,phone) VALUES (?,?,?,?,?)");
                     $insertCmd->bind_param("sssss",$_POST["fname"],$_POST["lname"],$_POST["email"],password_hash($_POST["pass"],PASSWORD_BCRYPT,["cost"=>10]),$_POST["phone"]);
                     $insertCmd->execute();
-                    print_r($_POST);
                     echo "Registered successfully";
                     $insertCmd->close();
 
@@ -42,7 +41,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $insertCmd = $dbCon->prepare("INSERT INTO `user_tb`(`fname`, `lname`, `email`, `pass`, `phone`, type) VALUES (?,?,?,?,?,?)");
                     $insertCmd->bind_param("sssssi",$_POST["fname"], $_POST["lname"], $_POST["email"], password_hash($_POST["pass"], PASSWORD_BCRYPT, ["cost" => 10]), $_POST["phone"],$_POST["type"]);
                     $insertCmd->execute();
-                    print_r($_POST);
                     echo "Registered successfully";
                     $insertCmd->close();
 
@@ -50,38 +48,111 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 }
                 break;
-                case "/loginC":
-                $login = false;
+            case "/login":
+                $email = $_POST["email"];
+                $pass = $_POST["pass"];
+                
+                $loginUser = null;
+                $dbCon = mysqli_connect($dbServer, $dbUser, $dbPass, $dbName); 
+                if (!$dbCon) { 
+                    die("Connection error " . mysqli_connect_error()); 
+                } else {
+                    $selectCmd = "SELECT * FROM customer_tb WHERE email='" . $_POST["email"] . "'";
+                    $result = mysqli_query($dbCon, $selectCmd); 
+                    if (mysqli_num_rows($result) > 0) { 
+                        $user = mysqli_fetch_assoc($result); 
+                        $selectUid = "SELECT * FROM blockCus_tb WHERE uid=" . $user["uid"];
+                        $uidResult = mysqli_query($dbCon, $selectUid);
+                        if (mysqli_num_rows($uidResult) > 0) {
+                            $loginUser = 0;
+                            $response = array('status' => "Account blocked. Ask João to help you.");
+                            echo json_encode($response);
+                        } else {
+                            if (password_verify($_POST["pass"], $user["pass"])) {
+                                if ($user["ecount"] != 5) {
+                                    $updateUser = "UPDATE customer_tb SET ecount=5 WHERE uid=" . $user["uid"];
+                                    mysqli_query($dbCon, $updateUser);
+                                }
+                                session_start();
+                                session_id();
+                                $_SESSION["loginUser"] = $user; //login succes   
+                                $_SESSION["timeout"] = time() + 60; //store the current timestamp of login
+                            } else {
+                                $user["ecount"]--;
+                                if ($user["ecount"] <= 0) {
+                                    $insBlock = "INSERT INTO blockCus_tb (uid) VALUES (" . $user["uid"] . ")";
+                                    mysqli_query($dbCon, $insBlock);
+                                }
+                                $updateUser = "UPDATE customer_tb SET ecount=" . $user["ecount"] . " WHERE uid=" . $user["uid"];
+                                mysqli_query($dbCon, $updateUser);
+                            }
+                        } //PHP_SESSION_ACTIVE is 2 one session exists
+                    } //PHP_SESSION_NONE is 1 no session exists
+                }
+                if (session_status() === PHP_SESSION_ACTIVE) {
+                    $response = array('status' => 'Logged in', 'sessionId' => session_id());
+                    echo json_encode($response);
+                } else if ($loginUser === null) {
+                    $response = array('status' => 'username/password wrong');
+                    echo json_encode($response);
+                }
+            
+                mysqli_close($dbCon);
+                break;
+            case "/log":
+                $email = $_POST["email"];
+                $pass = $_POST["pass"];
+
+                $loginUser = null;
                 $dbCon = mysqli_connect($dbServer, $dbUser, $dbPass, $dbName);
                 if (!$dbCon) {
-                    die("Connection to the database failed! " . mysqli_connect_error());
-                }else{
-                    $selectCmd = "SELECT * FROM customer_tb WHERE email = ? AND pass = ?";
-                    $stmt = $dbCon->prepare($selectCmd);
-                    $stmt->bind_param("ss", $email, $pass);
-
-                    $stmt->execute();
-                    $result = $stmt->get_result();
-
-                    if($result->num_rows>0){
-                        $user = $result->fetch_assoc();
-
-                        session_start();
-                        $response = ["sid"=>session_id(), "user"=>$user];
-                        $login = true;
-                        echo json_encode($response);
-                    }else{
-                        echo 'Invalid username or password';
-                    }
-                    $stmt->close();
-                    $dbCon->close();
+                    die("Connection error " . mysqli_connect_error());
+                } else {
+                    $selectCmd = "SELECT * FROM user_tb WHERE email='" . $_POST["email"] . "'";
+                    $result = mysqli_query($dbCon, $selectCmd);
+                    if (mysqli_num_rows($result) > 0) {
+                        $user = mysqli_fetch_assoc($result);
+                        $selectUid = "SELECT * FROM block_tb WHERE uid=" . $user["uid"];
+                        $uidResult = mysqli_query($dbCon, $selectUid);
+                        if (mysqli_num_rows($uidResult) > 0) {
+                            $loginUser = 0;
+                           $response = array('status' => "Account Blocked, ask Kosuke to help you.");
+                           echo json_encode($response);
+                        } else {
+                            if (password_verify($_POST["pass"], $user["pass"])) {
+                                if ($user["ecount"] != 5) {
+                                    $updateUser = "UPDATE user_tb SET ecount=5 WHERE uid=" . $user["uid"];
+                                    mysqli_query($dbCon, $updateUser);
+                                }
+                                session_start();
+                                session_id();
+                                $_SESSION["loginUser"] = $user; //login succes   
+                                $_SESSION["timeout"] = time() + 60; //store the current timestamp of login
+                            } else {
+                                $user["ecount"]--;
+                                if ($user["ecount"] <= 0) {
+                                    $insBlock = "INSERT INTO block_tb (uid) VALUES (" . $user["uid"] . ")";
+                                    mysqli_query($dbCon, $insBlock);
+                                }
+                                $updateUser = "UPDATE user_tb SET ecount=" . $user["ecount"] . " WHERE uid=" . $user["uid"];
+                                mysqli_query($dbCon, $updateUser);
+                            }
+                        } //PHP_SESSION_ACTIVE is 2 one session exists
+                    } //PHP_SESSION_NONE is 1 no session exists
                 }
-                if($login)
-                    http_response_code(200);
-                else
-                    http_response_code(401);
-                break;
+                if (session_status() === PHP_SESSION_ACTIVE) {
+                    $response = array('status' => 'Logged in', 'sessionId' => session_id(),'type'=> $user["type"]);
+                    echo json_encode($response);
+                } else if ($loginUser === null) {
+                    $response = array('status' => 'username/password wrong');
+                    echo json_encode($response);
+                }
+
+                mysqli_close($dbCon);
+                
             }
+            
+            
         }
     }
 

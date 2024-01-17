@@ -14,11 +14,11 @@
                 <div class="col-5">
                     <form>
                         <div class="form-floating mb-3">
-                            <input type="email" class="form-control" name="email" placeholder="Enter Email"/>
+                            <input type="email" class="form-control" name="email" placeholder="Enter Email" required/>
                             <label for="email">Enter Email</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="password" class="form-control" name="pass" placeholder="Enter Password"/>
+                            <input type="password" class="form-control" name="pass" placeholder="Enter Password" required/>
                             <label for="pass">Enter Password</label>
                         </div>
                         <button type="submit" class="btn btn-outline-primary"> Login </button>
@@ -34,27 +34,38 @@
 
 </body>
 <script>
-   document.querySelector("form").addEventListener("submit",function(event){
+    document.querySelector("form").addEventListener("submit",function(event){
     event.preventDefault();
     let data = new FormData(event.target);
     let xhttp = new XMLHttpRequest();
-    xhttp.open("POST","http://localhost/books/myMain.php/login");
+    // xhttp.open("POST","http://localhost/php/final-project-c/php/myMain.php/log");
+
+    xhttp.open("POST","http://localhost/php/final-project-c/php/myMain.php/log");
+    // /Applications/XAMPP/xamppfiles/htdocs/php/final-project-c/php/myMain.php
+    
+    //to change this path should be doone first.
     xhttp.send(data);
     xhttp.onload = function(){
-        if (xhttp.status === 200) {
-            let responseText = xhttp.responseText;
-            let response = JSON.parse(responseText);
-            if (response.status === "Logged in") {
-                sessionStorage.setItem("status", response.status);
-                sessionStorage.setItem('sessionId', response.sessionId);
-                location.replace("./teste.html");
-            } else {
-                if(response.status === "username/password wrong")
-                sessionStorage.setItem("status", response.status);
-                alert(response.status);
+    if (xhttp.status === 200) {
+        let responseText = xhttp.responseText;
+        let response = JSON.parse(responseText);
+        if (response.status === "Logged in") {
+            sessionStorage.setItem('status', response.status);
+            sessionStorage.setItem('sessionId', response.sessionId);
+            sessionStorage.setItem('type',response.type);
+            if (response.type === "0") {
+                sessionStorage.setItem('type',0)
+                location.replace("./staff/all-books.html");
             }
+            else if (response.type === "1") {
+                sessionStorage.setItem('type',1);
+                location.replace("./admin/admin.html");
+            }
+        } else {
+            alert(response.status);
         }
     }
+}
 })
 </script>
 </html>
