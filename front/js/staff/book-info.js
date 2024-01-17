@@ -62,7 +62,7 @@ const getAllBookWithStatus = async (book) => {
         // Read data from 'book_tb' and 'book_status_tb' and create book object by Book class.
         data = (JSON.parse(data));
         for (let book of data) {
-            let bookObj = new Book(book.book_id, book.title, book.description, book.authors, book.registered_at, book.image_url, book.status, book.borrowed_at, book.due_back);
+            let bookObj = new Book(book.book_id, book.title, book.description, book.authors, book.name, book.registered_at, book.image_url, book.status, book.borrowed_at, book.due_back);
             // After making book object, push it to the array for book obj.
             allBookObjData.push(bookObj);
         }

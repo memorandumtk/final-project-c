@@ -23,7 +23,7 @@ const getAllBookData = () => {
             let loadData;
             loadData = JSON.parse(data);
             for (let data of loadData) {
-                let bookObj = new Book(data.book_id, data.title, data.description,data.authors, data.registered_at, data.image_url);
+                let bookObj = new Book(data.book_id, data.title, data.description,data.authors, "", data.registered_at, data.image_url, "Available", null, null);
                 allBookData.push(bookObj);
             }
             console.log(allBookData);
