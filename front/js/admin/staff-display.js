@@ -88,6 +88,8 @@ async function load() {
 load();
 
 // add staff
+
 function redirectToRegisterPage() {
-    window.location.href = "http://localhost/php/final-project-c/front/registerSa.html";
+    window.location.href = "http://localhost/php/final-project-c/front/admin/register-admin.html";
 }
+document.querySelector("#add-staff").addEventListener("click", redirectToRegisterPage);
