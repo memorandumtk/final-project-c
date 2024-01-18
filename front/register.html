@@ -50,7 +50,8 @@
     xhttp.open("POST","http://localhost/php/final-project-c/php/myMain.php/register");
     xhttp.send(data);
     xhttp.onload = function(){
-        if (xhttp.response == "Registered successfully") { // check the response from the server
+        if (xhttp.status === 200) { // needed such this condition since there is output to show an error from php inserting a row.
+        // if (xhttp.response == "Registered successfully") { // check the response from the server
             location.replace("http://localhost/php/final-project-c/front/login.html"); // redirect to login.html
         } else {
             console.log(xhttp.response);
