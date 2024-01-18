@@ -2,5 +2,4 @@
 $dbServer = "localhost";
 $dbUser = "root";
 $dbPass = "";
-$dbName = "busers_db";
-?>
+$dbName = "c-library_db";
