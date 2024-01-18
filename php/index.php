@@ -37,7 +37,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             case "/borrBooks":
                 $query = "SELECT s.status_id, b.title,b.authors,s.borrowed_at, s.due_back FROM book_tb b, book_status_tb s WHERE b.book_id = s.book_id";
                 $statusData = query($connection, $query);
-                print_r($statusData);
                 $stArray = null;
 
                 while ($row = mysqli_fetch_assoc($statusData)) {
@@ -48,8 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $row["borrowed_at"],
                         $row["due_back"]
                     );
-                    // $stArray[] = array_map('strval', arravy_values((array) $status));
-                    echo $status;
+                    $stArray[] = array_map('strval', array_values((array) $status));
                 }
                 echo json_encode($stArray);
                 break;

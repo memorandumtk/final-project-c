@@ -9,19 +9,22 @@ function query($connection, $query)
 {
     return mysqli_query($connection, $query);
 }
-$data = json_decode(file_get_contents("php://input"));
+// $data = json_decode(file_get_contents("php://input"));
+$val = json_decode($_POST["val"]);
+$sessionId = $_POST["sessionId"];
 
-if (isset($data->val)) {
-    print_r($data->val);
-    $title = $data->val[1];
-    $author = $data->val[2];
-    $data->val[3] = date("Y-m-d");
-    $borrowed_at = $data->val[3];
-    $due_back = $data->val[4];
-    $book_id = 0;
-    // echo session_id();
-    echo json_encode($_SESSION["loginUser"]);
-    // $user_id = $_SESSION["loginUser"];
+if (isset($val)) {
+    // print_r($data->val);
+    $title = $val[1];
+    $author = $val[2];
+    $val[3] = date("Y-m-d");
+    $borrowed_at = $val[3];
+    $due_back = $val[4];
+    print_r($val);
+    session_id($_POST["sessionId"]);
+    session_start();
+    // print_r($_SESSION);
+    $user_id = $_SESSION["loginUser"]["uid"];
 
     $queryb = "SELECT book_id FROM book_tb WHERE title = '$title' AND authors = '$author' ";
     $result = query($connection, $queryb);
