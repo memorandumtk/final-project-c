@@ -1,9 +1,10 @@
 class Book {
-    constructor(book_id, title, description, authors, registered_at, image_url, status, borrowed_at, due_back) {
+    constructor(book_id, title, description, authors, category, registered_at, image_url, status, borrowed_at, due_back) {
         this.book_id = book_id;
         this.title = title;
         this.description = description;
         this.authors = authors;
+        this.category = category;
         this.registered_at = registered_at;
         this.image_url = image_url;
         this.status = status;

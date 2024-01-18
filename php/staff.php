@@ -32,12 +32,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if ($dbCon->connect_error) {
                     echo "DB connection error. " . $dbCon->connect_error;
                 } else {
-                    $bookId = $_POST["book_id"];
-                    $selectStatusOfBook = "SELECT * FROM `book_status_tb` WHERE book_id = $bookId";
-                    $result = $dbCon->query($selectStatusOfBook);
-                    if ($result->num_rows == 1) {
-                        $statusRecord = $result->fetch_assoc();
-                        echo json_encode($statusRecord);
+                    // This is query to take neccesary data to create book object to produce book info table having status info. The information come from three tables, 'book_tb', 'category_tb' and 'book_status_tb'.
+                    // $selectAllfBookWithStatus = "SELECT book_tb.book_id, book_tb.title, book_tb.description, book_tb.authors, book_tb.registered_at, book_tb.image_url, book_status_tb.borrowed_at, book_status_tb.due_back FROM book_tb LEFT JOIN book_status_tb ON book_tb.book_id = book_status_tb.book_id;";
+                    $selectAllfBookWithStatus = "SELECT book_tb.book_id, book_tb.title, book_tb.description, book_tb.authors, category_tb.name, book_tb.registered_at, book_tb.image_url, book_status_tb.borrowed_at, book_status_tb.due_back FROM book_tb LEFT JOIN book_status_tb ON book_tb.book_id = book_status_tb.book_id INNER JOIN category_tb ON book_tb.book_id = category_tb.book_id;";
+                    $result = $dbCon->query($selectAllfBookWithStatus);
+                    if ($result->num_rows > 0) {
+                        $allBookDataWithStatus = [];
+                        while ($book = $result->fetch_assoc()) {
+                            $book["status"] = ($book["borrowed_at"]) ? 'Borrowed' : 'Available';
+                            foreach ($book as $key => $value) {
+                                // for loop to change null value to hyphen(-).
+                                if (!$value) {
+                                    $book[$key] = '-';
+                                }
+                            }
+                            array_push($allBookDataWithStatus, $book);
+                        }
+                        echo json_encode($allBookDataWithStatus);
                     } else {
                         echo null;
                     }
@@ -52,16 +63,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if ($dbCon->connect_error) {
                         echo "DB connection error. " . $dbCon->connect_error;
                     } else {
-                        // Needed to disble foreign key referrence once.
-                        // Command refference URL.
-                        // https://stackoverflow.com/a/63510059/21951181
                         $bookId = $_POST["book_id"];
-                        $foreignKeyDisable = ("SET FOREIGN_KEY_CHECKS=0");
-                        mysqli_query($dbCon, $foreignKeyDisable);
-                        $delCmd = ("DELETE FROM `book_tb` WHERE book_id = $bookId");
+                        // Needed to be delete from 'category_tb' first.
+                        $delCmd = ("DELETE FROM `category_tb` WHERE book_id = $bookId");
                         $result = mysqli_query($dbCon, $delCmd);
-                        $foreignKeyDisable = ("SET FOREIGN_KEY_CHECKS=1");
-                        mysqli_query($dbCon, $foreignKeyDisable);
+                        // After deleting from 'category_tb', good to delete from 'book_tb'.
+                        $delCmd2 = ("DELETE FROM `book_tb` WHERE book_id = $bookId");
+                        $result = mysqli_query($dbCon, $delCmd2);
                         $dbCon->close();
                         echo "this is result of deletion of info of the book. ";
                         print_r($result);
@@ -82,6 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $description = $_POST["description"] ?: 'No description.';
                         $authors = $_POST["authors"];
                         $image_url = $_POST["image_url"];
+                        // Insert book data into 'book_tb'.
                         $insCmd = $dbCon->prepare("INSERT INTO `book_tb`(`title`, `description`, `authors`, `image_url`) VALUES (?,?,?,?)");
                         $insCmd->bind_param("ssss", $title, $description, $authors, $image_url);
                         $result = $insCmd->execute();
@@ -91,6 +100,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             echo "New book record is added.";
                         }
                         $insCmd->close();
+                        // Pick the book_id of book info inserted just above.
+                        $selectCmd = "SELECT * FROM `book_tb` WHERE `title` = '" . $title . "' AND `description` = '" . $description . "';";
+                        $selectedBook = $dbCon->query($selectCmd);
+                        if ($selectedBook->num_rows === 1) {
+                            $book = $selectedBook->fetch_assoc();
+                            // Insert book data into 'category_tb'.
+                            $category = $_POST["category"];
+                            $insCmd = $dbCon->prepare("INSERT INTO `category_tb`(`book_id`, `name`) VALUES (?,?)");
+                            $insCmd->bind_param("is", $book["book_id"], $category);
+                            $result = $insCmd->execute();
+                            if (!$result) {
+                                die('Insertion to category table is failed.');
+                            } else {
+                                echo "New book category is added.";
+                            }
+                            $insCmd->close();
+                        } else {
+                            echo "The book is not registered or depulicated.";
+                        }
                         $dbCon->close();
                     }
                 } else {

@@ -15,12 +15,11 @@
 </head>
 
 <body>
-
     <header>
-        <nav class="navbar navbar-expand-sm navbar-info bg-info">
+        <nav class="navbar navbar-expand-sm navbar-info bg-info overflow-hidden">
             <div class="container">
                 <div class="col-4">
-                    <a class="navbar-brand text-white" href="#">Navbar</a>
+                    <a class="navbar-brand text-white" href="#">C-Library</a>
                 </div>
                 <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse"
                     data-bs-target="#collapsibleNavId" aria-controls="collapsibleNavId" aria-expanded="false"
@@ -30,11 +29,10 @@
                 <div class="collapse navbar-collapse justify-content-end" id="collapsibleNavId">
                     <ul class="navbar-nav mt-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link active text-white" href="#" aria-current="page">Home
-                                <span class="visually-hidden">(current)</span></a>
+                            <a class="nav-link text-white" href="#">All-Books</a>
                         </li>
                         <li class="nav-item ">
-                            <a class="nav-link text-white" href="#">Link</a>
+                            <a class="nav-link active text-white" href="#" aria-current="page">Book-Info</a>
                         </li>
                     </ul>
                 </div>
@@ -43,50 +41,65 @@
         </nav>
     </header>
 
-
     <main>
-        <div class="container">
-            <form id="book-add-form">
-                <div class="row">
-                    <label for="title" class="col-4 col-form-label">Title</label>
-                    <div class="col-6">
-                        <input type="text" class="form-control" name="title" id="title" placeholder="input title of your book..." />
-                    </div>
+        <div class="container text-center">
+            <div class="d-flex flex-column gap-3">
+                <div class="col">
+                    <h2 class="">
+                        Add Book Form
+                    </h2>
                 </div>
-                <div class="row">
-                    <label for="description" class="form-label col-4">Description</label>
-                    <div class="col-8">
-                    <textarea class="form-control" name="description" id="description" rows="3"></textarea>
-                    </div>
+
+                <div class="container">
+                    <form id="book-add-form" class="d-flex flex-column gap-3">
+                        <div class="row">
+                            <label for="title" class="col-4 col-form-label">Title</label>
+                            <div class="col-6">
+                                <input type="text" class="form-control" name="title" id="title"
+                                    placeholder="input title of your book..." />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="description" class="form-label col-4">Description</label>
+                            <div class="col-8">
+                                <textarea class="form-control" name="description" id="description" rows="3"></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="authors" class="col-4 col-form-label">Authors</label>
+                            <div class="col-6">
+                                <input type="text" class="form-control" name="authors" id="authors"
+                                    placeholder="input authors of your book..." />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="category" class="col-4 col-form-label">Category</label>
+                            <div class="col-6">
+                                <input type="text" class="form-control" name="category" id="category"
+                                    placeholder="input category of your book..." />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="image_url" class="col-4 col-form-label">Image of url</label>
+                            <div class="col-6">
+                                <input type="text" class="form-control" name="image_url" id="image_url"
+                                    placeholder="input image url of your book..." />
+                            </div>
+                        </div>
+                        <div class="">
+                            <button type="submit" class="btn btn-primary">
+                                Add
+                            </button>
+                        </div>
+                    </form>
                 </div>
-                <div class="row">
-                    <label for="authors" class="col-4 col-form-label">Authors</label>
-                    <div class="col-6">
-                        <input type="text" class="form-control" name="authors" id="authors" placeholder="input authors of your book..." />
-                    </div>
-                </div>
-                <div class="row">
-                    <label for="image_url" class="col-4 col-form-label">Image of url</label>
-                    <div class="col-6">
-                        <input type="text" class="form-control" name="image_url" id="image_url" placeholder="input image url of your book..." />
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="offset-sm-4 col-sm-8">
-                        <button type="submit" class="btn btn-primary">
-                            Add
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
+            </div>
 
     </main>
 
 
-
-    <footer>
-        <div class="container-fruid bg-info">
+    <!-- <footer>
+        <div class="container-fruid bg-info overflow-hidden">
             <div class="row">
                 <div class="d-flex justify-content-end text-white pe-4">
                     Copyright@ teamC
@@ -94,6 +107,7 @@
             </div>
         </div>
     </footer>
+ -->
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
