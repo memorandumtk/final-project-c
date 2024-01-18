@@ -42,7 +42,7 @@
                     </div>
                     <button type="submit" class="btn btn-outline-success">Register</button>
                     <div>
-                     <a href="register.html"><p>  Login as customer</p></a>
+                        <a href="loginUser.html">Login</a>
                     </div>
                 </form>
             </div>
@@ -58,7 +58,11 @@
         xhttp.open("POST","http://127.0.0.1/books/myMain.php/reg");
         xhttp.send(data);
         xhttp.onload = function(){
+            if (xhttp.response == "Registered successfully") { // check the response from the server
+            location.replace("./loginUser.html"); // redirect to login.html
+        } else {
             console.log(xhttp.response);
+        }
         }
     })
 </script>

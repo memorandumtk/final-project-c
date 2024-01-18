@@ -34,6 +34,7 @@
                         <li class="nav-item ">
                             <a class="nav-link text-white" href="#">Book Info</a>
                         </li>
+                        <button type="submit" class="btn btn-inline-info">Logout</button>
                     </ul>
                 </div>
             </div>
@@ -81,6 +82,16 @@
 
 </body>
 
-
+<script>
+    //joao's code
+    document.querySelector(".btn.btn-inline-info").addEventListener("click", function (event) {
+    event.preventDefault();
+      sessionStorage.removeItem("uid");
+      sessionStorage.removeItem("type");
+      sessionStorage.removeItem("status");
+      sessionStorage.removeItem("sessionId");
+      location.replace("http://localhost/php/final-project-c/front/loginUser.html");
+  });   
+</script>
 
 </html>

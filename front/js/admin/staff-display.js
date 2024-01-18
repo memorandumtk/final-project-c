@@ -1,6 +1,6 @@
 
 import XMLReq from "../XMLReq.js"
-import Staff from "../classes/staff.js";
+import Staff from "../classes/staff.js"
 let adminPhp = "http://localhost/php/final-project-c/php/admin.php";
 const staffList = [];
 
