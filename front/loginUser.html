@@ -9,6 +9,7 @@
 </head>
 <body>
     <main>
+        <h3 style="text-align: center; margin-top: 40px;">Enter your credentials!</h3>
         <div class="container-fluid">
             <div class="row justify-content-center align-items-start g-2 mt-2">
                 <div class="col-5">
@@ -51,6 +52,7 @@
         let response = JSON.parse(responseText);
         if (response.status === "Logged in") {
             sessionStorage.setItem('status', response.status);
+            sessionStorage.setItem("uid", response.uid);
             sessionStorage.setItem('sessionId', response.sessionId);
             sessionStorage.setItem('type',response.type);
             if (response.type === "0") {

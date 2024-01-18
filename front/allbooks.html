@@ -26,6 +26,7 @@
             <a class="nav-item nav-link" href="./avBooks.html">Available Books</a>
             <a class="nav-item nav-link" href="./borrBooks.html">Borrowed Books</a>
         </div>
+        <button type="submit" class="btn btn-inline-info">Logout</button>
     </nav>
 
     <div class="card-container">
@@ -35,7 +36,7 @@
 </body>
 
 <script type="module">
-    import { XMLReq } from "./js/XMLReq.js";
+    import XMLReq from "./js/XMLReq.js";
     let xmlReq = new XMLReq("http://localhost/php/final-project-c/index.php/allbooks");
 
     const toCard = (data) => {
@@ -101,7 +102,14 @@
         return card;
     }
 
-
+    //JOAO CODE
+    document.querySelector(".btn.btn-inline-info").addEventListener("click", function (event) {
+    event.preventDefault();
+      sessionStorage.removeItem("uid");
+      sessionStorage.removeItem("status");
+      sessionStorage.removeItem("sessionId");
+      location.replace("http://localhost/php/final-project-c/front/login.html");
+  });
 </script>
 
 </html>

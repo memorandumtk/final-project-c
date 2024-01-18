@@ -1,6 +1,6 @@
 
 import XMLReq from "../XMLReq.js"
-import Staff from "../classes/staff.js";
+import Staff from "../classes/staff.js"
 let adminPhp = "http://localhost/php/final-project-c/php/admin.php";
 const staffList = [];
 
@@ -86,10 +86,3 @@ async function load() {
     tablePopper();
 }
 load();
-
-// add staff
-
-function redirectToRegisterPage() {
-    window.location.href = "http://localhost/php/final-project-c/front/admin/register-admin.html";
-}
-document.querySelector("#add-staff").addEventListener("click", redirectToRegisterPage);

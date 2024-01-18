@@ -2,6 +2,22 @@
 header("Access-Control-Allow-Origin: *");
 require("./config.php");
 require ("./classes/user.php");
+ 
+
+
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+$inactive = 60; //1 min
+$session_life = time() - $_SESSION['timeout'];
+
+if ($session_life > $inactive) {
+    session_destroy();
+    header("Location: ./login.html");
+    exit();
+}
+$_SESSION['timeout'] = time();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if(isset($_SERVER["PATH_INFO"])){
@@ -90,7 +106,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     } //PHP_SESSION_NONE is 1 no session exists
                 }
                 if (session_status() === PHP_SESSION_ACTIVE) {
-                    $response = array('status' => 'Logged in', 'sessionId' => session_id());
+                    $_SESSION["uid"] = $user["uid"];
+                    $response = array('status' => 'Logged in', 'sessionId' => session_id(),'uid' => $user["uid"]);                   
                     echo json_encode($response);
                 } else if ($loginUser === null) {
                     $response = array('status' => 'username/password wrong');
@@ -100,6 +117,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 mysqli_close($dbCon);
                 break;
             case "/log":
+                
                 $email = $_POST["email"];
                 $pass = $_POST["pass"];
 
@@ -141,7 +159,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     } //PHP_SESSION_NONE is 1 no session exists
                 }
                 if (session_status() === PHP_SESSION_ACTIVE) {
-                    $response = array('status' => 'Logged in', 'sessionId' => session_id(),'type'=> $user["type"]);
+                    $_SESSION["uid"] = $user["uid"];
+                    $response = array('status' => 'Logged in', 'sessionId' => session_id(),'type'=> $user["type"], 'uid'=>$user["uid"]);
                     echo json_encode($response);
                 } else if ($loginUser === null) {
                     $response = array('status' => 'username/password wrong');
