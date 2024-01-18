@@ -20,9 +20,7 @@ if (isset($data->val)) {
     $borrowed_at = $data->val[3];
     $due_back = $data->val[4];
     $book_id = 0;
-    echo session_id();
-    $user_id = session_id();
-    
+    $user_id = 1;
     $queryb = "SELECT book_id FROM book_tb WHERE title = '$title' AND authors = '$author' ";
     $result = query($connection,$queryb);
     while($row = mysqli_fetch_assoc($result)){

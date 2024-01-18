@@ -2,8 +2,6 @@
 header("Access-Control-Allow-Origin: *");
 require("./config.php");
 require ("./classes/user.php");
- 
-
 
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
