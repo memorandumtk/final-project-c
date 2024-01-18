@@ -18,7 +18,10 @@ const getAllBookData = () => {
     const allBookPath = staffPhp + "/all-books";
     // Making xmlhttp request to get all book data.
     let allBookRequest = new XMLReq(allBookPath);
-    allBookRequest.Post().then(
+    // To store sessionId from sessionStorage to be checked timeout value is valid.
+    let data = new FormData();
+    data.append("sid", sessionStorage.getItem("sessionId"));
+    allBookRequest.Post(data).then(
         (data) => {
             let loadData;
             loadData = JSON.parse(data);

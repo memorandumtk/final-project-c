@@ -4,7 +4,11 @@ import Staff from "../classes/staff.js"
 let adminPhp = "http://localhost/php/final-project-c/php/admin.php";
 const staffList = [];
 
-
+// Nevigate user to register-admin.html when add staff button is clicked.
+document.querySelector("#add-staff").addEventListener("click", (e) => {
+    e.preventDefault();
+    location.replace("http://localhost/php/final-project-c/front/admin/register-admin.html");
+})
 
 // Handle if delete button is clicked.
 const deleteHandler = async (staff) => {
@@ -23,14 +27,6 @@ const deleteHandler = async (staff) => {
     }
 }
 
-
-
-
-
-
-
-
-
 // Function to make a table having information of all of books.
 const tablePopper = () => {
     const tbody = document.querySelectorAll('tbody')[0];
@@ -43,8 +39,8 @@ const tablePopper = () => {
         delButton.textContent = 'Delete';
         delButton.classList.add('btn', 'btn-success')
 
-     
-       
+
+
         delButton.addEventListener('click', (e) => {
             e.preventDefault();
             deleteHandler(staff);

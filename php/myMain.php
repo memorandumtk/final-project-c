@@ -115,8 +115,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 mysqli_close($dbCon);
                 break;
-            case "/log":
 
+            case "/log":
                 $email = $_POST["email"];
                 $pass = $_POST["pass"];
 

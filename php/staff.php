@@ -4,6 +4,17 @@ header("Access-Control-Allow-Headers: *");
 require("../config.php");
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_SERVER["PATH_INFO"])) {
+        // Log I tried to do timeout.
+        // if (isset($_POST["sid"])) {
+        //     session_id($_POST["sid"]);
+        //     session_start(); //resume the previous session using the session ID
+        //     if (isset($_SESSION["timeout"]) && $_SESSION["timeout"] > time()) { // still within the threshold
+        //         $_SESSION["timeout"] = time() + 60;
+        //     } else { //the user is timed out
+        //         session_unset();
+        //         session_destroy();
+        //     }
+        // } else {
         switch ($_SERVER["PATH_INFO"]) {
                 // Taking all book information.
             case "/all-books":
@@ -168,5 +179,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
                 break;
         }
+        // }
     }
 }
