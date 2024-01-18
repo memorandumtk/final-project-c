@@ -47,11 +47,11 @@
     event.preventDefault(); // to stop the form from submitting normally
     let data = new FormData(event.target);
     let xhttp = new XMLHttpRequest();
-    xhttp.open("POST","http://localhost/books/myMain.php/register");
+    xhttp.open("POST","http://localhost/php/final-project-c/php/myMain.php/register");
     xhttp.send(data);
     xhttp.onload = function(){
         if (xhttp.response == "Registered successfully") { // check the response from the server
-            location.replace("./login.html"); // redirect to login.html
+            location.replace("http://localhost/php/final-project-c/front/login.html"); // redirect to login.html
         } else {
             console.log(xhttp.response);
         }

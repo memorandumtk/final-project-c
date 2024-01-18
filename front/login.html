@@ -39,7 +39,7 @@
     event.preventDefault();
     let data = new FormData(event.target);
     let xhttp = new XMLHttpRequest();
-    xhttp.open("POST","http://localhost/books/myMain.php/login");
+    xhttp.open("POST","http://localhost/php/final-project-c/php/myMain.php/login");
     xhttp.send(data);
     xhttp.onload = function(){
         if (xhttp.status === 200) {

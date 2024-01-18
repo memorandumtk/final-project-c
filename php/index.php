@@ -33,20 +33,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
                 echo json_encode($books);
                 break;
-                
+
             case "/borrBooks":
                 $query = "SELECT s.status_id, b.title,b.authors,s.borrowed_at, s.due_back FROM book_tb b, book_status_tb s WHERE b.book_id = s.book_id";
                 $statusData = query($connection, $query);
+                print_r($statusData);
+                $stArray = null;
 
                 while ($row = mysqli_fetch_assoc($statusData)) {
-                   $status = new StatusClass(
-                    $row["status_id"],
-                    $row["title"],
-                    $row["authors"],
-                    $row["borrowed_at"],
-                    $row["due_back"]
-                   );
-                   $stArray[] = array_map('strval', array_values((array) $status));
+                    $status = new StatusClass(
+                        $row["status_id"],
+                        $row["title"],
+                        $row["authors"],
+                        $row["borrowed_at"],
+                        $row["due_back"]
+                    );
+                    // $stArray[] = array_map('strval', arravy_values((array) $status));
+                    echo $status;
                 }
                 echo json_encode($stArray);
                 break;
@@ -56,9 +59,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 FROM book_tb b
                 LEFT JOIN book_status_tb s ON b.book_id = s.book_id
                 WHERE s.book_id IS NULL";
-                $statusdata = query($connection,$query);
+                $statusdata = query($connection, $query);
 
-                while($row =mysqli_fetch_assoc($statusdata)){
+                while ($row = mysqli_fetch_assoc($statusdata)) {
                     $status = new StatusClass(
                         null,
                         $row["title"],
@@ -73,13 +76,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-?>
